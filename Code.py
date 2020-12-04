@@ -67,10 +67,4 @@ def Faraday(V_form,v_0,f,N_s,N_p,t,xls):# as we don't know the inductance for th
     plt.show()
     
 
-Faraday(triangle(f,t),v_0,f,N_s,N_p,t,5e4)
-
-
-
-
-
-
+Faraday(sinusoidal(f,t),v_0,f,N_s,N_p,t,5e4)
