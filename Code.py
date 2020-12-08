@@ -65,6 +65,30 @@ def Faraday(V_form,v_0,f,N_s,N_p,t,xls):# as we don't know the inductance for th
     plt.xlabel('Time (s)')
     plt.ylabel('Voltage (V)')
     plt.show()
-    
+def efficiency(Ip,xls):
+    Vp=2*np.pi*f*L_P*Ip
+    Is=i_s(Vp,n_s,n_p,xls)
+    Vs=2*np.pi*f*L_S*Is
+    return print(Is*Vs/(Ip*Vp))    
 
 Faraday(sinusoidal(f,t),v_0,f,N_s,N_p,t,5e4)
+efficiency(i_p(v_0,X_l(f,L_P),R),5e4)
+
+#%%
+
+#Calculam eroarea:
+import numpy as np    
+def error(Is,Vs,Ip,Vp):
+    eIs=0.08*Is
+    eIp=0.08*Ip
+    eVp=0.05*Vp
+    eVs=0.05*Vs
+    return np.sqrt((eVs**2)*(Is/(Vp*Ip))**2+(eIs**2)*(Vs/(Vp*Ip))**2+(eVp**2)*(Is*Vs/(Ip*Vp**2))**2+(eIp**2)*(Is*Vs/(Vp*Ip**2))**2)
+    
+print(error(31.1e-3,0.857/2,137.3e-3,3.103/2))
+
+
+
+
+
+
