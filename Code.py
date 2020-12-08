@@ -10,7 +10,7 @@ import numpy as np
 from scipy import signal 
 
 f=5*1e3#the frequnecy 
-v_0=2#the amplitude of the signal 
+v_0=5#the amplitude of the signal 
 N_s=52#the number of turns for the secondary coil
 N_p=98#the number of turns for the primary coil
 l_s=6*1e-2#length of the secondary coil
@@ -29,7 +29,7 @@ n_s=N_s/l_s#number of turns per unit lenght for the secondary coil
 R=18#resistance used in the experiment, which was in series with the primary coil
 
 
-t=np.linspace(0,10,100)
+t=np.linspace(0,6,100)
 
 
 def X_l(f,L):# calculating the reactance for the primary coil
@@ -54,10 +54,10 @@ def i_s(Vp,ns, np,xl):# calculates the peak value for the current intesnity thro
 def Faraday(V_form,v_0,f,N_s,N_p,t,xls):# as we don't know the inductance for the secondary coil for the used frequency, we put it as a variable 
     Ip=i_p(v_0,X_l(f,L_P),R)#calculating the value for the I peak in the primary coil
     Vp=2*np.pi*f*L_P*Ip#calculating the value for the V peak across the primary coil
-    E_p=-Vp*np.gradient(V_form)# the produced voltage of the primary coil
+    E_p=Vp*V_form# the produced voltage of the primary coil
     Is=i_s(Vp,n_s,n_p,xls)#for the secondary coil we use the relation that it has with the form of V_p(t)i.e it is its derivative
     Vs=2*np.pi*f*L_S*Is
-    E_s=-Vs*np.gradient(np.gradient(V_form))
+    E_s=-Vs*np.gradient(V_form)
     plt.plot(t,E_p, label='Primary coil')
     plt.plot(t,E_s,label='Secondary Coil')
     plt.grid()
@@ -65,14 +65,26 @@ def Faraday(V_form,v_0,f,N_s,N_p,t,xls):# as we don't know the inductance for th
     plt.xlabel('Time (s)')
     plt.ylabel('Voltage (V)')
     plt.show()
-def efficiency(Ip,xls):
+def efficiency(Ip,xls,):
     Vp=2*np.pi*f*L_P*Ip
     Is=i_s(Vp,n_s,n_p,xls)
     Vs=2*np.pi*f*L_S*Is
-    return print(Is*Vs/(Ip*Vp))    
+    return print(Is*Vs/(Ip*Vp))  
+params = {
+   'axes.labelsize': 18,
+   'font.size': 18,
+   'font.family': 'sans-serif',
+   'font.serif': 'Arial',
+   'legend.fontsize': 18,
+   'xtick.color':'black', 'ytick.color':'black', 'figure.facecolor':'white',
+   'xtick.labelsize': 18,
+   'ytick.labelsize': 18, 
+   'figure.figsize': [16, 9]
+}
+plt.rcParams.update(params)  
 
-Faraday(sinusoidal(f,t),v_0,f,N_s,N_p,t,5e4)
-efficiency(i_p(v_0,X_l(f,L_P),R),5e4)
+Faraday(sinusoidal(f,t),v_0,f,N_s,N_p,t,1e4)
+efficiency(i_p(v_0,X_l(f,L_P),R),10e4)
 
 #%%
 
